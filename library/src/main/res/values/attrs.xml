@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Banner">
+        <!--是否自动播放-->
+        <attr name="autoPlay" format="boolean" />
+        <!--是否无限循环-->
+        <attr name="boundaryLoop" format="boolean" />
+        <attr name="boundaryCache" format="boolean" />
+        <!--是否可滚动-->
+        <attr name="scrollable" format="boolean" />
+        <!--轮播时间间隔-->
+        <attr name="duration" format="integer" />
+        <!--每一页的间隔-->
+        <attr name="pageMargin" format="dimension" />
+        <!--每一页占屏幕宽的百分比 0.0->1-->
+        <attr name="pagePercent" format="float" />
+        <attr name="pageScale" format="float" />
+        <attr name="pageAlpha" format="float" />
+        <!--滚动动画时间-->
+        <attr name="scrollerDuration" format="integer" />
+        <!--图片scaleType-->
+        <attr name="imageScaleType" format="enum">
+            <enum name="center" value="0" />
+            <enum name="centerCrop" value="1" />
+            <enum name="centerInside" value="2" />
+            <enum name="fitXY" value="3" />
+            <enum name="fitCenter" value="4" />
+            <enum name="fitStart" value="5" />
+            <enum name="fitEnd" value="6" />
+            <enum name="matrix" value="7" />
+        </attr>
+
+        <attr name="indicator_enabled" format="boolean" />
+        <attr name="indicator_width" format="dimension" />
+        <attr name="indicator_height" format="dimension" />
+        <attr name="indicator_margin" format="dimension" />
+        <attr name="indicator_animator" format="reference" />
+        <attr name="indicator_animator_reverse" format="reference" />
+        <attr name="indicator_drawable" format="reference" />
+        <attr name="indicator_drawable_unselected" format="reference" />
+
+        <attr name="indicator_orientation" format="enum">
+            <!-- Defines an horizontal widget. -->
+            <enum name="horizontal" value="0" />
+            <!-- Defines a vertical widget. -->
+            <enum name="vertical" value="1" />
+        </attr>
+
+        <!--value from Gravity-->
+        <attr name="indicator_gravity">
+            <!-- Push object to the top of its container, not changing its size. -->
+            <flag name="top" value="3" />
+            <!-- Push object to the bottom of its container, not changing its size. -->
+            <flag name="bottom" value="80" />
+            <!-- Push object to the left of its container, not changing its size. -->
+            <flag name="left" value="3" />
+            <!-- Push object to the right of its container, not changing its size. -->
+            <flag name="right" value="5" />
+            <!-- Place object in the vertical center of its container, not changing its size. -->
+            <flag name="center_vertical" value="16" />
+            <!-- Grow the vertical size of the object if needed so it completely fills its container. -->
+            <flag name="fill_vertical" value="112" />
+            <!-- Place object in the horizontal center of its container, not changing its size. -->
+            <flag name="center_horizontal" value="1" />
+            <!-- Grow the horizontal size of the object if needed so it completely fills its container. -->
+            <flag name="fill_horizontal" value="7" />
+            <!-- Place the object in the center of its container in both the vertical and horizontal axis, not changing its size. -->
+            <flag name="center" value="17" />
+            <!-- Grow the horizontal and vertical size of the object if needed so it completely fills its container. -->
+            <flag name="fill" value="119" />
+            <!-- Additional option that can be set to have the top and/or bottom edges of
+            the child clipped to its container's bounds.
+            The clip will be based on the vertical gravity: a top gravity will clip the bottom
+            edge, a bottom gravity will clip the top edge, and neither will clip both edges. -->
+            <flag name="clip_vertical" value="128" />
+            <!-- Additional option that can be set to have the left and/or right edges of
+            the child clipped to its container's bounds.
+            The clip will be based on the horizontal gravity: a left gravity will clip the right
+            edge, a right gravity will clip the left edge, and neither will clip both edges. -->
+            <flag name="clip_horizontal" value="8" />
+            <!-- Push object to the beginning of its container, not changing its size. -->
+            <flag name="start" value="8388611" />
+            <!-- Push object to the end of its container, not changing its size. -->
+            <flag name="end" value="8388613" />
+        </attr>
+
+        <attr name="indicator_layout_margin" format="dimension" />
+        <attr name="indicator_layout_margin_left" format="dimension" />
+        <attr name="indicator_layout_margin_right" format="dimension" />
+        <attr name="indicator_layout_margin_top" format="dimension" />
+        <attr name="indicator_layout_margin_bottom" format="dimension" />
+    </declare-styleable>
+</resources>
