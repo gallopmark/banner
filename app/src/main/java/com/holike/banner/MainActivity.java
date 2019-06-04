@@ -2,6 +2,7 @@ package com.holike.banner;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 .withImageLoader(new MyImageLoader())
                 .withBannerClickListener(new Banner.OnBannerClickListener() {
                     @Override
-                    public void onBannerClick(View view, int position) {
+                    public void onBannerClick(@NonNull View view, int position) {
                         Toast.makeText(getApplicationContext(), String.valueOf(position), Toast.LENGTH_LONG).show();
                     }
                 })

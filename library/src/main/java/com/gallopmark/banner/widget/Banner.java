@@ -740,7 +740,7 @@ public class Banner extends FrameLayout {
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, final int position) {
-            ImageView imageView = imageLoader.createImageView(mContext);
+            final ImageView imageView = imageLoader.createImageView(mContext);
             imageView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
             if (mScaleType != null) {
                 imageView.setScaleType(mScaleType);
@@ -750,7 +750,7 @@ public class Banner extends FrameLayout {
                 @Override
                 public void onClick(View view) {
                     if (mOnBannerClickListener != null) {
-                        mOnBannerClickListener.onBannerClick(view, position);
+                        mOnBannerClickListener.onBannerClick(imageView, position);
                     }
                 }
             });
@@ -765,7 +765,7 @@ public class Banner extends FrameLayout {
     }
 
     public interface OnBannerClickListener {
-        void onBannerClick(View view, int position);
+        void onBannerClick(@NonNull View view, int position);
     }
 
     public ViewPager getViewPager() {
