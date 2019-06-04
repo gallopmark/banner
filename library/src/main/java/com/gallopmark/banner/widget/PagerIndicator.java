@@ -81,7 +81,7 @@ public class PagerIndicator extends LinearLayout {
         mImmediateAnimatorIn = createAnimatorIn(context);
         mImmediateAnimatorIn.setDuration(0);
         mIndicatorBackgroundResId = (mIndicatorBackgroundResId == 0) ? R.drawable.indicator_oval_white : mIndicatorBackgroundResId;
-        mIndicatorUnselectedBackgroundResId = (mIndicatorUnselectedBackgroundResId == 0) ? mIndicatorBackgroundResId : mIndicatorUnselectedBackgroundResId;
+        mIndicatorUnselectedBackgroundResId = (mIndicatorUnselectedBackgroundResId == 0) ? R.drawable.indicator_oval_gray : mIndicatorUnselectedBackgroundResId;
     }
 
     private Animator createAnimatorOut(Context context) {
@@ -128,14 +128,8 @@ public class PagerIndicator extends LinearLayout {
             if (pagerAdapter == null || pagerAdapter.getCount() <= 0) {
                 return;
             }
-            if (mAnimatorIn.isRunning()) {
-                mAnimatorIn.end();
-                mAnimatorIn.cancel();
-            }
-            if (mAnimatorOut.isRunning()) {
-                mAnimatorOut.end();
-                mAnimatorOut.cancel();
-            }
+            detachAnimator(mAnimatorIn);
+            detachAnimator(mAnimatorOut);
             View currentIndicator;
             if (mLastPosition >= 0 && (currentIndicator = getChildAt(mLastPosition)) != null) {
                 currentIndicator.setBackgroundResource(mIndicatorUnselectedBackgroundResId);
@@ -155,6 +149,13 @@ public class PagerIndicator extends LinearLayout {
         public void onPageScrollStateChanged(int state) {
         }
     };
+
+    private void detachAnimator(Animator animator) {
+        if (animator.isRunning()) {
+            animator.end();
+            animator.cancel();
+        }
+    }
 
     public DataSetObserver getDataSetObserver() {
         return mInternalDataSetObserver;
@@ -204,10 +205,7 @@ public class PagerIndicator extends LinearLayout {
     }
 
     private void addIndicator(@DrawableRes int backgroundDrawableId, Animator animator) {
-        if (animator.isRunning()) {
-            animator.end();
-            animator.cancel();
-        }
+        detachAnimator(animator);
         View indicator = new View(getContext());
         indicator.setBackgroundResource(backgroundDrawableId);
         addView(indicator, mIndicatorWidth, mIndicatorHeight);
