@@ -5,12 +5,9 @@ group='com.github.gallopmark'
 android {
     compileSdkVersion 28
 
-
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
     }
 
     buildTypes {
@@ -23,7 +20,6 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly 'com.android.support:appcompat-v7:28.0.0'
     compileOnly 'com.android.support:viewpager:28.0.0'
 }

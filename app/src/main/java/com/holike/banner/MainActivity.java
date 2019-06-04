@@ -28,10 +28,6 @@ public class MainActivity extends AppCompatActivity {
         list.add("https://file.holike.com/1aa19351-88ce-479a-9fd6-42444e8366db.jpg");
         list.add("https://file.holike.com/301f1b8c-f63b-4796-ad80-9cbc6a9241fe.jpg");
         list.add("https://file.holike.com/e6be1812-cdb3-4b94-bfb1-85763946a843.jpg");
-        list.add("https://file.holike.com/929461a5-72ea-4fbd-8085-973c34f0a9db.jpg");
-        list.add("https://file.holike.com/1aa19351-88ce-479a-9fd6-42444e8366db.jpg");
-        list.add("https://file.holike.com/301f1b8c-f63b-4796-ad80-9cbc6a9241fe.jpg");
-        list.add("https://file.holike.com/e6be1812-cdb3-4b94-bfb1-85763946a843.jpg");
 //        adapter = new MyAdapter(this, list);
         banner.initializer()
                 .withImages(list)
