@@ -610,20 +610,77 @@ public class Banner extends FrameLayout {
         }
 
         public BannerInitializer indicator(BannerIndicator indicator) {
-            mIndicatorMargin = indicator.getIndicatorMargin();
-            mIndicatorWidth = indicator.getIndicatorWidth();
-            mIndicatorHeight = indicator.getIndicatorHeight();
-            mAnimatorResId = indicator.getIndicatorAnimatorResId();
-            mAnimatorReverseResId = indicator.getIndicatorAnimatorReverseResId();
-            mIndicatorBackgroundResId = indicator.getIndicatorBackgroundResId();
-            mIndicatorUnselectedBackgroundResId = indicator.getIndicatorUnselectedBackgroundResId();
-            mIndicatorLayoutMargin = indicator.getIndicatorLayoutMargin();
-            mIndicatorLayoutMarginLeft = indicator.getIndicatorLayoutMarginLeft();
-            mIndicatorLayoutMarginRight = indicator.getIndicatorLayoutMarginRight();
-            mIndicatorLayoutMarginTop = indicator.getIndicatorLayoutMarginTop();
-            mIndicatorLayoutMarginBottom = indicator.getIndicatorLayoutMarginBottom();
-            mIndicatorOrientation = indicator.getIndicatorOrientation();
-            mIndicatorGravity = indicator.getIndicatorGravity();
+            setBannerIndicator(indicator);
+            return this;
+        }
+
+        public BannerInitializer indicatorMargin(int indicatorMargin) {
+            setIndicatorMargin(indicatorMargin);
+            return this;
+        }
+
+        public BannerInitializer indicatorWidth(int indicatorWidth) {
+            setIndicatorWidth(indicatorWidth);
+            return this;
+        }
+
+        public BannerInitializer indicatorHeight(int indicatorHeight) {
+            setIndicatorHeight(indicatorHeight);
+            return this;
+        }
+
+        public BannerInitializer indicatorAnimatorResId(int animatorResId) {
+            setIndicatorAnimatorResId(animatorResId);
+            return this;
+        }
+
+        public BannerInitializer indicatorAnimatorReverseResId(int animatorReverseResId) {
+            setIndicatorAnimatorReverseResId(animatorReverseResId);
+            return this;
+        }
+
+        public BannerInitializer indicatorBackgroundResId(int indicatorBackgroundResId) {
+            setIndicatorBackgroundResId(indicatorBackgroundResId);
+            return this;
+        }
+
+        public BannerInitializer indicatorUnselectedBackgroundResId(int indicatorUnselectedBackgroundResId) {
+            setIndicatorUnselectedBackgroundResId(indicatorUnselectedBackgroundResId);
+            return this;
+        }
+
+        public BannerInitializer indicatorLayoutMargin(int indicatorLayoutMargin) {
+            setIndicatorLayoutMargin(indicatorLayoutMargin);
+            return this;
+        }
+
+        public BannerInitializer indicatorLayoutMarginLeft(int indicatorLayoutMarginLeft) {
+            setIndicatorLayoutMarginLeft(indicatorLayoutMarginLeft);
+            return this;
+        }
+
+        public BannerInitializer indicatorLayoutMarginRight(int indicatorLayoutMarginRight) {
+            setIndicatorLayoutMarginRight(indicatorLayoutMarginRight);
+            return this;
+        }
+
+        public BannerInitializer indicatorLayoutMarginTop(int indicatorLayoutMarginTop) {
+            setIndicatorLayoutMarginTop(indicatorLayoutMarginTop);
+            return this;
+        }
+
+        public BannerInitializer indicatorLayoutMarginBottom(int indicatorLayoutMarginBottom) {
+            setIndicatorLayoutMarginBottom(indicatorLayoutMarginBottom);
+            return this;
+        }
+
+        public BannerInitializer indicatorOrientation(int indicatorOrientation) {
+            setIndicatorOrientation(indicatorOrientation);
+            return this;
+        }
+
+        public BannerInitializer indicatorGravity(int indicatorGravity) {
+            setIndicatorGravity(indicatorGravity);
             return this;
         }
 
