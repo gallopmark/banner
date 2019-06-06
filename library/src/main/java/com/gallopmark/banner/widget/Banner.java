@@ -270,7 +270,7 @@ public class Banner extends FrameLayout {
     private class AutoTask implements Runnable {
         @Override
         public void run() {
-            if (mWrapperAdapter.getCount() > 0) {
+            if (mWrapperAdapter != null && mWrapperAdapter.getCount() > 0) {
                 int position = getCurrentItem() + 1;
                 setCurrentItem(position);
             }
@@ -809,6 +809,7 @@ public class Banner extends FrameLayout {
     }
 
     public void setCurrentItem(int item, boolean smoothScroll) {
+        if (mWrapperAdapter == null) return;
         int realItem = mWrapperAdapter.toInnerPosition(item);
         mViewPager.setCurrentItem(realItem, smoothScroll);
     }
@@ -848,14 +849,16 @@ public class Banner extends FrameLayout {
 
         @Override
         public void onPageSelected(int position) {
-            int realPosition = mWrapperAdapter.toRealPosition(position);
-            if (mPreviousPosition != realPosition) {
-                mPreviousPosition = realPosition;
-                if (mOnPageChangeListeners != null) {
-                    for (int i = 0; i < mOnPageChangeListeners.size(); i++) {
-                        ViewPager.OnPageChangeListener listener = mOnPageChangeListeners.get(i);
-                        if (listener != null) {
-                            listener.onPageSelected(realPosition);
+            if (mWrapperAdapter != null) {
+                int realPosition = mWrapperAdapter.toRealPosition(position);
+                if (mPreviousPosition != realPosition) {
+                    mPreviousPosition = realPosition;
+                    if (mOnPageChangeListeners != null) {
+                        for (int i = 0; i < mOnPageChangeListeners.size(); i++) {
+                            ViewPager.OnPageChangeListener listener = mOnPageChangeListeners.get(i);
+                            if (listener != null) {
+                                listener.onPageSelected(realPosition);
+                            }
                         }
                     }
                 }
