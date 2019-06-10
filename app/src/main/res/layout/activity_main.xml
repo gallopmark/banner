@@ -1,17 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <com.gallopmark.banner.widget.Banner
         android:id="@+id/banner"
         android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:auto_play="true"
+        app:image_scaleType="centerCrop"
         app:indicator_enabled="true"
-        app:autoPlay="false"
-        app:imageScaleType="centerCrop"
-        app:indicator_gravity="end|bottom"
-        android:layout_height="200dp"/>
+        app:indicator_gravity="end|bottom" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="The following banner belongs to the custom adapter" />
+
+    <com.gallopmark.banner.widget.Banner
+        android:id="@+id/mBanner2"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:auto_play="true"
+        app:indicator_enabled="true"
+        app:indicator_gravity="end|bottom" />
 </LinearLayout>

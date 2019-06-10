@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.DataSetObserver;
 import android.support.annotation.AnimatorRes;
 import android.support.annotation.DrawableRes;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
@@ -17,10 +18,9 @@ import com.gallopmark.banner.BannerConfig;
 import com.gallopmark.banner.R;
 import com.gallopmark.banner.Utils;
 
-public class PagerIndicator extends LinearLayout {
+class PagerIndicator extends LinearLayout {
 
     private Banner banner;
-    private PagerAdapter pagerAdapter;
     private int mIndicatorMargin = -1;
     private int mIndicatorWidth = -1;
     private int mIndicatorHeight = -1;
@@ -32,6 +32,7 @@ public class PagerIndicator extends LinearLayout {
     private Animator mAnimatorIn;
     private Animator mImmediateAnimatorOut;
     private Animator mImmediateAnimatorIn;
+    private boolean isSingleEnabled;
 
     private int mLastPosition = -1;
 
@@ -99,11 +100,15 @@ public class PagerIndicator extends LinearLayout {
         return animatorIn;
     }
 
+    public PagerIndicator setSingleEnabled(boolean singleEnabled) {
+        isSingleEnabled = singleEnabled;
+        return this;
+    }
+
     public void setupBanner(Banner banner) {
         this.banner = banner;
         if (banner.getAdapter() != null) {
             mLastPosition = -1;
-            pagerAdapter = banner.getAdapter();
             registerDataSetObserver(mInternalDataSetObserver);
             createIndicators();
             banner.removeOnPageChangeListener(mInternalPageChangeListener);
@@ -113,7 +118,8 @@ public class PagerIndicator extends LinearLayout {
     }
 
     public void registerDataSetObserver(DataSetObserver observer) {
-        pagerAdapter.registerDataSetObserver(observer);
+        if (getAdapter() != null)
+            getAdapter().registerDataSetObserver(observer);
     }
 
     private final ViewPager.OnPageChangeListener mInternalPageChangeListener = new ViewPager.OnPageChangeListener() {
@@ -125,7 +131,7 @@ public class PagerIndicator extends LinearLayout {
 
         @Override
         public void onPageSelected(int position) {
-            if (pagerAdapter == null || pagerAdapter.getCount() <= 0) {
+            if (getItemCount() <= 0) {
                 return;
             }
             detachAnimator(mAnimatorIn);
@@ -157,18 +163,25 @@ public class PagerIndicator extends LinearLayout {
         }
     }
 
-    public DataSetObserver getDataSetObserver() {
-        return mInternalDataSetObserver;
+    public int getItemCount() {
+        if (getAdapter() != null) return getAdapter().getCount();
+        return 0;
+    }
+
+    @Nullable
+    public PagerAdapter getAdapter() {
+        if (banner == null) return null;
+        return banner.getAdapter();
     }
 
     private DataSetObserver mInternalDataSetObserver = new DataSetObserver() {
         @Override
         public void onChanged() {
             super.onChanged();
-            if (pagerAdapter == null) {
+            if (getAdapter() == null) {
                 return;
             }
-            int newCount = pagerAdapter.getCount();
+            int newCount = getItemCount();
             int currentCount = getChildCount();
             if (newCount == currentCount) {  // No change
                 return;
@@ -181,19 +194,14 @@ public class PagerIndicator extends LinearLayout {
         }
     };
 
-    public void addOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
-        if (banner == null) {
-            return;
-        }
-        banner.removeOnPageChangeListener(onPageChangeListener);
-        banner.addOnPageChangeListener(onPageChangeListener);
-    }
-
     private void createIndicators() {
         removeAllViews();
-        if (pagerAdapter == null || pagerAdapter.getCount() <= 0)
-            return;
-        int count = pagerAdapter.getCount();
+        if (isSingleEnabled) {
+            if (getItemCount() <= 0) return;
+        } else {
+            if (getItemCount() <= 1) return;
+        }
+        int count = getItemCount();
         int currentItem = banner.getCurrentItem();
         for (int i = 0; i < count; i++) {
             if (currentItem == i) {
@@ -236,8 +244,8 @@ public class PagerIndicator extends LinearLayout {
     }
 
     public void unregisterDataSetObserver() {
-        if (pagerAdapter != null) {
-            pagerAdapter.unregisterDataSetObserver(mInternalDataSetObserver);
+        if (getAdapter() != null) {
+            getAdapter().unregisterDataSetObserver(mInternalDataSetObserver);
         }
     }
 }

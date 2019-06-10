@@ -48,7 +48,7 @@ import java.util.List;
 public class Banner extends FrameLayout {
 
     /*适配器转换类，达到无限循环效果 getCount()方法 +2*/
-    final class WrapperPagerAdapter extends PagerAdapter {
+    class WrapperPagerAdapter extends PagerAdapter {
 
         private PagerAdapter mAdapter;
 
@@ -65,25 +65,10 @@ public class Banner extends FrameLayout {
             mBoundaryLooping = flag;
         }
 
-        final class AdapterDataSetObserver extends DataSetObserver {
-            private WrapperPagerAdapter wrapperAdapter;
-
-            AdapterDataSetObserver(WrapperPagerAdapter wrapperAdapter) {
-                this.wrapperAdapter = wrapperAdapter;
-            }
-
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                wrapperAdapter.notifyDataSetChanged();
-            }
-        }
 
         WrapperPagerAdapter(PagerAdapter adapter) {
             this.mAdapter = adapter;
             pagerItems = new SparseArray<>();
-            AdapterDataSetObserver adapterDataSetObserver = new AdapterDataSetObserver(this);
-            this.mAdapter.registerDataSetObserver(adapterDataSetObserver);
         }
 
         @Override
@@ -213,11 +198,20 @@ public class Banner extends FrameLayout {
         }
     }
 
-    private static final String TAG = Banner.class.getName();
+    static final String TAG = Banner.class.getName();
     private Context mContext;
     private ViewPager mViewPager;
 
+    private PagerAdapter mPagerAdapter;
     private WrapperPagerAdapter mWrapperAdapter;
+    private DataSetObserver mAdapterDataObserver = new DataSetObserver() {
+        @Override
+        public void onChanged() {
+            if (mWrapperAdapter != null) {
+                mWrapperAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 
     private List<ViewPager.OnPageChangeListener> mOnPageChangeListeners;
 
@@ -225,6 +219,8 @@ public class Banner extends FrameLayout {
     private int duration = BannerConfig.DEFAULT_DURATION;
     /*是否自动播放*/
     private boolean isAutoPlay = BannerConfig.AUTO_PLAY;
+    /*单张图是否允许轮播*/
+    private boolean isSingleEnabled = BannerConfig.SINGLE_ENABLED;
     /*是否无限循环*/
     private boolean isBoundaryLoop = BannerConfig.IS_LOOP;
     /*是否使用缓存*/
@@ -249,6 +245,7 @@ public class Banner extends FrameLayout {
 
     /*indicator*/
     private boolean isIndicatorEnabled = BannerConfig.INDICATOR_ENABLED;
+    private boolean isIndicatorSingleEnabled = BannerConfig.INDICATOR_SINGLE_ENABLED;
     private PagerIndicator pagerIndicator;
     private int mIndicatorMargin = -1;  //指示器（圆点）之间间距
     private int mIndicatorWidth = -1;   //指示器宽度
@@ -270,11 +267,11 @@ public class Banner extends FrameLayout {
     private class AutoTask implements Runnable {
         @Override
         public void run() {
-            if (mWrapperAdapter != null && mWrapperAdapter.getCount() > 0) {
+            /*单张图是否可以轮播*/
+            if (mWrapperAdapter != null && (isSingleEnabled ? mWrapperAdapter.getRealCount() > 0 : mWrapperAdapter.getRealCount() > 1)) {
                 int position = getCurrentItem() + 1;
                 setCurrentItem(position);
             }
-            startAutoPlay();
         }
     }
 
@@ -294,26 +291,28 @@ public class Banner extends FrameLayout {
         pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pageMargin, metrics);
         TypedArray ta = mContext.obtainStyledAttributes(attrs, R.styleable.Banner);
         duration = ta.getInteger(R.styleable.Banner_duration, duration);
-        isAutoPlay = ta.getBoolean(R.styleable.Banner_autoPlay, isAutoPlay);
-        isBoundaryLoop = ta.getBoolean(R.styleable.Banner_boundaryLoop, isBoundaryLoop);
-        isBoundaryCaching = ta.getBoolean(R.styleable.Banner_boundaryCache, isBoundaryCaching);
+        isAutoPlay = ta.getBoolean(R.styleable.Banner_auto_play, isAutoPlay);
+        isSingleEnabled = ta.getBoolean(R.styleable.Banner_single_enabled, isSingleEnabled);
+        isBoundaryLoop = ta.getBoolean(R.styleable.Banner_boundary_loop, isBoundaryLoop);
+        isBoundaryCaching = ta.getBoolean(R.styleable.Banner_boundary_cache, isBoundaryCaching);
         isScrollable = ta.getBoolean(R.styleable.Banner_scrollable, isScrollable);
-        pageMargin = ta.getDimensionPixelSize(R.styleable.Banner_pageMargin, pageMargin);
-        pagePercent = ta.getFloat(R.styleable.Banner_pagePercent, pagePercent);
-        scaleMin = ta.getFloat(R.styleable.Banner_pageScale, scaleMin);
-        alphaMin = ta.getFloat(R.styleable.Banner_pageAlpha, alphaMin);
-        scrollerDuration = ta.getInteger(R.styleable.Banner_scrollerDuration, scrollerDuration);
-        int imageScaleType = ta.getInt(R.styleable.Banner_imageScaleType, 1);
+        pageMargin = ta.getDimensionPixelSize(R.styleable.Banner_page_margin, pageMargin);
+        pagePercent = ta.getFloat(R.styleable.Banner_page_percent, pagePercent);
+        scaleMin = ta.getFloat(R.styleable.Banner_page_scale, scaleMin);
+        alphaMin = ta.getFloat(R.styleable.Banner_page_alpha, alphaMin);
+        scrollerDuration = ta.getInteger(R.styleable.Banner_scroller_duration, scrollerDuration);
+        int imageScaleType = ta.getInt(R.styleable.Banner_image_scaleType, 1);
         setupScaleType(imageScaleType);
 
         /*indicator*/
         isIndicatorEnabled = ta.getBoolean(R.styleable.Banner_indicator_enabled, isIndicatorEnabled);
+        isIndicatorSingleEnabled = ta.getBoolean(R.styleable.Banner_indicator_single_enabled, isIndicatorSingleEnabled);
         mIndicatorWidth = ta.getDimensionPixelSize(R.styleable.Banner_indicator_width, -1);
         mIndicatorHeight = ta.getDimensionPixelSize(R.styleable.Banner_indicator_height, -1);
         mIndicatorMargin = ta.getDimensionPixelSize(R.styleable.Banner_indicator_margin, -1);
         mAnimatorResId = ta.getResourceId(R.styleable.Banner_indicator_animator, mAnimatorResId);
         mAnimatorReverseResId = ta.getResourceId(R.styleable.Banner_indicator_animator_reverse, 0);
-        mIndicatorBackgroundResId = ta.getResourceId(R.styleable.Banner_indicator_drawable, mIndicatorBackgroundResId);
+        mIndicatorBackgroundResId = ta.getResourceId(R.styleable.Banner_indicator_drawable_selected, mIndicatorBackgroundResId);
         mIndicatorUnselectedBackgroundResId = ta.getResourceId(R.styleable.Banner_indicator_drawable_unselected, mIndicatorUnselectedBackgroundResId);
         mIndicatorLayoutMargin = ta.getDimensionPixelSize(R.styleable.Banner_indicator_layout_margin, defaultMargin());
         mIndicatorLayoutMarginLeft = ta.getDimensionPixelSize(R.styleable.Banner_indicator_layout_margin_left, defaultMargin());
@@ -369,11 +368,11 @@ public class Banner extends FrameLayout {
         setClipChildren(false);
         mViewPager = new ViewPager(mContext);
         mViewPager.setClipChildren(false);
-        int realWidth = getScreenWidth();
+        int realWidth = LayoutParams.MATCH_PARENT;
         if (pagePercent != 1f) {
-            realWidth = (int) (realWidth * pagePercent);
+            realWidth = (int) (getScreenWidth() * pagePercent);
         }
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(realWidth, FrameLayout.LayoutParams.MATCH_PARENT);
+        LayoutParams layoutParams = new LayoutParams(realWidth, LayoutParams.MATCH_PARENT);
         layoutParams.gravity = Gravity.CENTER;
         setLayoutParams(layoutParams);
         mViewPager.setPageMargin(pageMargin);
@@ -452,6 +451,10 @@ public class Banner extends FrameLayout {
 
     public void setScaleType(@Nullable ImageView.ScaleType mScaleType) {
         this.mScaleType = mScaleType;
+    }
+
+    public void setSingleEnabled(boolean singleEnabled) {
+        isSingleEnabled = singleEnabled;
     }
 
     public void setAutoPlay(boolean isAutoPlay) {
@@ -609,6 +612,11 @@ public class Banner extends FrameLayout {
             return this;
         }
 
+        public BannerInitializer indicatorSingleEnabled(boolean flag) {
+            isIndicatorSingleEnabled = flag;
+            return this;
+        }
+
         public BannerInitializer indicator(BannerIndicator indicator) {
             setBannerIndicator(indicator);
             return this;
@@ -691,9 +699,6 @@ public class Banner extends FrameLayout {
                 return;
             }
             setAdapter(new ImageBannerAdapter(mImageLoader));
-            if (isIndicatorEnabled) {
-                setupIndicator();
-            }
         }
     }
 
@@ -714,8 +719,9 @@ public class Banner extends FrameLayout {
                 params.setMargins(mIndicatorLayoutMarginLeft, mIndicatorLayoutMarginTop, mIndicatorLayoutMarginRight, mIndicatorLayoutMarginBottom);
             }
             pagerIndicator.setLayoutParams(params);
-            pagerIndicator.configureIndicator(mIndicatorWidth, mIndicatorHeight, mIndicatorMargin, mAnimatorResId, mAnimatorReverseResId, mIndicatorBackgroundResId, mIndicatorUnselectedBackgroundResId);
-            pagerIndicator.setupBanner(this);
+            pagerIndicator.configureIndicator(mIndicatorWidth, mIndicatorHeight, mIndicatorMargin, mAnimatorResId, mAnimatorReverseResId,
+                    mIndicatorBackgroundResId, mIndicatorUnselectedBackgroundResId);
+            pagerIndicator.setSingleEnabled(isIndicatorSingleEnabled).setupBanner(this);
             addView(pagerIndicator);
         }
     }
@@ -792,12 +798,23 @@ public class Banner extends FrameLayout {
         mViewPager.setPageMarginDrawable(drawable);
     }
 
-    public void setAdapter(PagerAdapter adapter) {
-        mWrapperAdapter = new WrapperPagerAdapter(adapter);
+    public void setAdapter(@NonNull PagerAdapter adapter) {
+        // 为了防止多次设置Adapter
+        if (mPagerAdapter != null) {
+            mPagerAdapter.unregisterDataSetObserver(mAdapterDataObserver);
+            mPagerAdapter = null;
+        }
+        mPagerAdapter = adapter;
+        mWrapperAdapter = new WrapperPagerAdapter(mPagerAdapter);
         mWrapperAdapter.setBoundaryCaching(isBoundaryCaching);
         mWrapperAdapter.setBoundaryLooping(isBoundaryLoop);
         mViewPager.setAdapter(mWrapperAdapter);
+        mPagerAdapter.registerDataSetObserver(mAdapterDataObserver);
         setCurrentItem(0, false);
+        if (isIndicatorEnabled) {
+            setupIndicator();
+        }
+        startAutoPlay();
     }
 
     public PagerAdapter getAdapter() {
@@ -863,6 +880,7 @@ public class Banner extends FrameLayout {
                     }
                 }
             }
+            startAutoPlay();
         }
 
         @Override
@@ -972,14 +990,16 @@ public class Banner extends FrameLayout {
     }
 
     @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        startAutoPlay();
+    protected void onDetachedFromWindow() {
+        release();
+        super.onDetachedFromWindow();
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
+    /*释放资源*/
+    protected void release() {
         stopAutoPlay();
-        super.onDetachedFromWindow();
+        if (mPagerAdapter != null) {
+            mPagerAdapter.unregisterDataSetObserver(mAdapterDataObserver);
+        }
     }
 }
