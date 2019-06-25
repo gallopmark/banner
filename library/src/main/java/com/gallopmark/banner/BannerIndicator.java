@@ -1,7 +1,7 @@
 package com.gallopmark.banner;
 
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /*banner indicator
  * builder and setting values

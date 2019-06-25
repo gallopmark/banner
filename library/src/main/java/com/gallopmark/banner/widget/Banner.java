@@ -6,13 +6,11 @@ import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
-import android.support.annotation.DrawableRes;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -118,9 +116,7 @@ public class Banner extends FrameLayout {
         @NonNull
         @Override
         public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            int realPosition = (mAdapter instanceof FragmentPagerAdapter
-                    || mAdapter instanceof FragmentStatePagerAdapter) ? position
-                    : toRealPosition(position);
+            int realPosition = toRealPosition(position);
             if (mBoundaryCaching) {
                 PagerItem pagerItem = pagerItems.get(position);
                 if (pagerItem != null) {
@@ -135,9 +131,7 @@ public class Banner extends FrameLayout {
         public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
             int realFirst = getRealFirstPosition();
             int realLast = getRealLastPosition();
-            int realPosition = (mAdapter instanceof FragmentPagerAdapter
-                    || mAdapter instanceof FragmentStatePagerAdapter) ? position
-                    : toRealPosition(position);
+            int realPosition = toRealPosition(position);
             if (mBoundaryCaching && (position == realFirst || position == realLast)) {
                 pagerItems.put(position, new PagerItem(container, realPosition, object));
             } else {
