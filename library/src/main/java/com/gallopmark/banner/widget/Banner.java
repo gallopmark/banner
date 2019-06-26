@@ -6,11 +6,13 @@ import android.content.res.TypedArray;
 import android.database.DataSetObserver;
 import android.graphics.drawable.Drawable;
 import android.os.Parcelable;
+
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -552,27 +554,18 @@ public class Banner extends FrameLayout {
 
     public class BannerInitializer {
 
-        /*设置图片加载器*/
-        public BannerInitializer withImageLoader(ImageLoader imageLoader) {
-            mImageLoader = imageLoader;
-            return this;
-        }
-
-        /*设置图片数据源*/
-        public BannerInitializer withImages(@NonNull List<String> images) {
-            withImages(images, null);
-            return this;
-        }
-
-        /*同时设置图片数据源和图片加载器*/
-        public BannerInitializer withImages(@NonNull List<String> images, @Nullable ImageLoader imageLoader) {
-            withImageLoader(imageLoader);
+        BannerInitializer(@NonNull List<String> images) {
             if (mImages == null) {
                 mImages = new ArrayList<>();
             } else {
                 mImages.clear();
             }
             mImages.addAll(images);
+        }
+
+        /*设置图片加载器*/
+        public BannerInitializer withImageLoader(ImageLoader imageLoader) {
+            mImageLoader = imageLoader;
             return this;
         }
 
@@ -696,8 +689,8 @@ public class Banner extends FrameLayout {
         }
     }
 
-    public BannerInitializer initializer() {
-        return new BannerInitializer();
+    public BannerInitializer initializer(@NonNull List<String> images) {
+        return new BannerInitializer(images);
     }
 
     /*设置指示器*/
