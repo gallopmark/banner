@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.gallopmark.banner.widget.Banner
+    <com.xcode.banner.widget.Banner
         android:id="@+id/banner"
         android:layout_width="match_parent"
         android:layout_height="200dp"
@@ -20,7 +20,7 @@
         android:gravity="center"
         android:text="The following banner belongs to the custom adapter" />
 
-    <com.gallopmark.banner.widget.Banner
+    <com.xcode.banner.widget.Banner
         android:id="@+id/mBanner2"
         android:layout_width="match_parent"
         android:layout_height="200dp"

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.holike.banner">
+    package="com.xcode.banner">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <application
@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity android:name="com.xcode.banner.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
